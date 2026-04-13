@@ -35,3 +35,7 @@ venv.bak/
 # 操作系统
 ehthumbs.db
 Desktop.ini
+
+# 备份文件
+*.backup
+menu-enhanced.sh
