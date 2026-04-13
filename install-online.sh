@@ -330,7 +330,6 @@ main() {
 }
 
 # 脚本入口点
-if [[ "${BASH_SOURCE[0]}" = "$0" ]]; then
-    trap 'echo -e "\n${RED}安装被中断${NC}"; cleanup; exit 1' INT TERM
-    main "$@"
-fi
+# 无论是直接执行还是通过管道执行，都运行主函数
+trap 'echo -e "\n${RED}安装被中断${NC}"; cleanup; exit 1' INT TERM
+main "$@"
