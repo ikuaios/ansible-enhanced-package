@@ -60,8 +60,11 @@ Ansible 增强技能包在线安装脚本
 功能:
   1. 从 GitHub 下载最新版本
   2. 自动解压安装包
-  3. 运行标准安装脚本
-  4. 清理临时文件
+  3. 自动检测并安装 Ansible（如未安装）
+  4. 安装 Ansible 增强技能到 WorkBuddy
+  5. 配置别名和快捷命令
+  6. 创建示例配置和 Playbook
+  7. 清理临时文件
 
 仓库地址: ${REPO_URL}
 文档地址: ${REPO_URL}/tree/main/docs
@@ -239,6 +242,7 @@ show_completion() {
     echo -e "${BLUE}安装总结:${NC}"
     echo -e "  - 版本: ${VERSION}"
     echo -e "  - 来源: ${REPO_URL}"
+    echo -e "  - Ansible: ${GREEN}已安装/已验证${NC}"
     echo -e "  - 临时目录: ${INSTALL_DIR} (已清理)\n"
     
     echo -e "${BLUE}下一步操作:${NC}"
@@ -295,7 +299,8 @@ main() {
     echo -e "${BLUE}安装信息:${NC}"
     echo -e "  - 仓库: ${REPO_URL}"
     echo -e "  - 版本: ${VERSION}"
-    echo -e "  - 临时目录: ${INSTALL_DIR}\n"
+    echo -e "  - 临时目录: ${INSTALL_DIR}"
+    echo -e "  - 自动安装 Ansible: ${GREEN}是${NC} (如未安装)\n"
     
     # 检查依赖
     check_dependencies
