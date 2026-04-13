@@ -1,0 +1,151 @@
+---
+# 第一个 Playbook 示例
+# 学习 Ansible 的基础语法和结构
+
+- name: 基础 Playbook 演示
+  hosts: localhost
+  connection: local
+  become: false  # 不需要提权
+  
+  vars:
+    app_name: "my_application"
+    app_version: "1.0.0"
+    app_port: 8080
+    
+  tasks:
+    # 1. 调试信息任务
+    - name: 显示欢迎信息
+      ansible.builtin.debug:
+        msg: "🎯 开始执行 Playbook: {{ app_name }} v{{ app_version }}"
+        
+    - name: 显示系统信息
+      ansible.builtin.debug:
+        msg: "操作系统: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+        
+    - name: 显示变量值
+      ansible.builtin.debug:
+        var: app_port
+        
+    # 2. 条件判断示例
+    - name: 检查是否是 Linux 系统
+      ansible.builtin.debug:
+        msg: "这是一个 Linux 系统"
+      when: ansible_os_family == "Debian" or ansible_os_family == "RedHat"
+      
+    - name: 检查是否是 macOS 系统
+      ansible.builtin.debug:
+        msg: "这是一个 macOS 系统"
+      when: ansible_os_family == "Darwin"
+      
+    - name: 检查是否是 Windows 系统
+      ansible.builtin.debug:
+        msg: "这是一个 Windows 系统"
+      when: ansible_os_family == "Windows"
+        
+    # 3. 循环示例
+    - name: 创建多个目录
+      ansible.builtin.file:
+        path: "/tmp/ansible-demo/{{ item }}"
+        state: directory
+        mode: '0755'
+      loop:
+        - logs
+        - data
+        - cache
+        - config
+      loop_control:
+        label: "创建目录: {{ item }}"
+        
+    # 4. 文件操作示例
+    - name: 创建配置文件
+      ansible.builtin.copy:
+        dest: "/tmp/ansible-demo/config/{{ app_name }}.conf"
+        content: |
+          # {{ app_name }} 配置文件
+          # 版本: {{ app_version }}
+          port = {{ app_port }}
+          log_level = info
+          max_connections = 100
+        owner: "{{ ansible_user_id }}"
+        mode: '0644'
+        
+    # 5. 命令执行示例
+    - name: 显示当前目录
+      ansible.builtin.command:
+        cmd: pwd
+      register: pwd_result
+      
+    - name: 显示命令结果
+      ansible.builtin.debug:
+        var: pwd_result.stdout
+        
+    - name: 显示磁盘使用情况 (Linux/macOS)
+      ansible.builtin.command:
+        cmd: df -h /
+      when: ansible_os_family != "Windows"
+      register: disk_result
+      ignore_errors: true
+      
+    - name: 显示磁盘信息
+      ansible.builtin.debug:
+        var: disk_result.stdout
+      when: disk_result is defined and disk_result.stdout != ""
+      
+    # 6. 模板示例 (Jinja2)
+    - name: 创建模板文件
+      ansible.builtin.copy:
+        dest: "/tmp/ansible-demo/README.md"
+        content: |
+          # {{ app_name }}
+          
+          版本: {{ app_version }}
+          端口: {{ app_port }}
+          
+          创建时间: {{ ansible_date_time.date }}
+          主机名: {{ ansible_hostname }}
+          
+          目录结构:
+          {% for dir in ['logs', 'data', 'cache', 'config'] %}
+          - {{ dir }}/
+          {% endfor %}
+          
+          系统信息:
+          - 操作系统: {{ ansible_distribution }} {{ ansible_distribution_version }}
+          - 内核版本: {{ ansible_kernel }}
+          - 内存总量: {{ ansible_memtotal_mb }} MB
+          - CPU 核心数: {{ ansible_processor_vcpus }}
+        mode: '0644'
+        
+  handlers:
+    # 处理器示例 (由 notify 触发)
+    - name: 重启应用
+      ansible.builtin.debug:
+        msg: "🚀 应用 {{ app_name }} 已重启"
+        
+    - name: 重新加载配置
+      ansible.builtin.debug:
+        msg: "🔧 配置已重新加载"
+        
+  post_tasks:
+    # 后置任务 (无论成功失败都会执行)
+    - name: 显示完成信息
+      ansible.builtin.debug:
+        msg: "✅ Playbook 执行完成!"
+        
+# 第二个 Play (多 Play 示例)
+- name: 清理任务
+  hosts: localhost
+  connection: local
+  become: false
+  
+  tasks:
+    - name: 询问是否清理临时文件
+      ansible.builtin.pause:
+        prompt: "是否清理临时文件? (输入 y 确认)"
+      register: cleanup_confirm
+      
+    - name: 清理临时目录
+      ansible.builtin.file:
+        path: "/tmp/ansible-demo"
+        state: absent
+      when: cleanup_confirm.user_input == "y"
