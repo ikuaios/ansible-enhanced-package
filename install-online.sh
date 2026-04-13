@@ -142,6 +142,7 @@ download_package() {
     local download_url
     
     echo -e "${BLUE}下载安装包...${NC}"
+    echo -e "${BLUE}正在从 GitHub 仓库下载...${NC}"
     
     # 创建临时目录
     rm -rf "$INSTALL_DIR"
@@ -212,6 +213,8 @@ run_installation() {
     
     # 传递所有剩余参数给安装脚本
     echo -e "${BLUE}运行标准安装脚本...${NC}"
+    echo -e "${BLUE}这将安装 Ansible 增强技能包及其所有组件${NC}"
+    echo -e "${YELLOW}=========================================${NC}"
     echo -e "${YELLOW}=========================================${NC}"
     
     # 运行安装脚本，传递所有参数
