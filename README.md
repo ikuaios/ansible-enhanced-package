@@ -8,7 +8,7 @@
 
 ## ✨ 特性
 
-- **🚀 一键安装** - 跨平台自动安装，支持 Linux/macOS/Windows
+- **🚀 一键安装/在线安装** - 支持在线安装和本地安装，跨平台自动安装，支持 Linux/macOS/Windows
 - **🎯 智能别名** - 50+ 实用别名和快捷命令，提升工作效率
 - **📚 中文文档** - 完整的中文说明、示例和最佳实践
 - **🔧 增强技能** - 基于 ansible-expert 技能的增强版，包含代码生成器和检查器
@@ -38,13 +38,29 @@ ansible-enhanced-package/
 ├── install/           # 安装脚本
 │   ├── install.sh            # 跨平台主脚本
 │   ├── install-linux-macos.sh # Linux/macOS 脚本
-│   └── install-windows.ps1   # Windows 脚本
+│   ├── install-windows.ps1   # Windows 脚本
+│   └── install-online.sh     # 在线安装脚本
 └── LICENSE            # MIT 许可证
 ```
 
 ## 🚀 快速安装
 
-### 方法一：一键安装（推荐）
+### 方法一：在线安装（最新版）
+
+无需下载安装包，直接从 GitHub 安装最新版本：
+
+```bash
+# 安装最新稳定版本（推荐）
+curl -sSL https://raw.githubusercontent.com/ikuaios/ansible-enhanced-package/main/install-online.sh | bash
+
+# 安装指定版本
+curl -sSL https://raw.githubusercontent.com/ikuaios/ansible-enhanced-package/main/install-online.sh | bash -s -- --version=v1.0.0
+
+# 安装开发版本（main 分支）
+curl -sSL https://raw.githubusercontent.com/ikuaios/ansible-enhanced-package/main/install-online.sh | bash -s -- --latest
+```
+
+### 方法二：一键安装（本地包）
 
 ```bash
 # 1. 下载安装包并解压
@@ -55,7 +71,7 @@ cd ansible-enhanced-package
 ./install/install.sh
 ```
 
-### 方法二：分步安装
+### 方法三：分步安装
 
 ```bash
 # Linux/macOS
