@@ -117,22 +117,22 @@ check_dependencies() {
 
 # 获取最新版本标签
 get_latest_release() {
-    echo -e "${BLUE}获取最新版本信息...${NC}"
+    echo -e "${BLUE}获取最新版本信息...${NC}" >&2
     
     local latest_tag
     if ! latest_tag=$(curl -s "${API_URL}/releases/latest" | grep -o '"tag_name": "[^"]*"' | cut -d'"' -f4); then
-        echo -e "${YELLOW}警告: 无法获取最新版本信息，使用 main 分支${NC}"
+        echo -e "${YELLOW}警告: 无法获取最新版本信息，使用 main 分支${NC}" >&2
         echo "main"
         return 1
     fi
     
     if [ -z "$latest_tag" ]; then
-        echo -e "${YELLOW}警告: 未找到发布版本，使用 main 分支${NC}"
+        echo -e "${YELLOW}警告: 未找到发布版本，使用 main 分支${NC}" >&2
         echo "main"
         return 1
     fi
     
-    echo -e "${GREEN}✓ 最新版本: ${latest_tag}${NC}"
+    echo -e "${GREEN}✓ 最新版本: ${latest_tag}${NC}" >&2
     echo "$latest_tag"
 }
 
